@@ -1,1 +1,1 @@
-# rl-devsecops-openenv
+# RL-Based DevSecOps OpenEnv Environment
