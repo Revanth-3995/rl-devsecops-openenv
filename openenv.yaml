@@ -1,0 +1,18 @@
+name: rl-devsecops-openenv
+version: 1.0
+description: RL-based DevSecOps environment
+
+action_space:
+  type: discrete
+  values: ["DETECT", "REPORT", "BLOCK", "PATCH", "ESCALATE", "APPROVE", "ROLLBACK"]
+
+observation_space:
+  task: int
+  severity: float
+
+reward_range: [0.0, 1.0]
+
+tasks:
+  - secret_scanning
+  - cve_triage
+  - pipeline_audit
