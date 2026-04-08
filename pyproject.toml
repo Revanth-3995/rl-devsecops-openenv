@@ -4,12 +4,20 @@ version = "0.1.0"
 description = "DevSecOps OpenEnv environment"
 
 dependencies = [
-    "openenv-core>=0.2.0"
+    "openenv-core>=0.2.0",
+    "fastapi",
+    "pydantic",
+    "uvicorn",
+    "torch",
+    "gymnasium"
 ]
 
 [build-system]
 requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["env", "agent", "server"]
 
 [project.scripts]
 server = "server.app:main"

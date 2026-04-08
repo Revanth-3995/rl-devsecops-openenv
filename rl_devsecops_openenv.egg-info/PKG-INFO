@@ -1,0 +1,10 @@
+Metadata-Version: 2.4
+Name: rl-devsecops-openenv
+Version: 0.1.0
+Summary: DevSecOps OpenEnv environment
+Requires-Dist: openenv-core>=0.2.0
+Requires-Dist: fastapi
+Requires-Dist: pydantic
+Requires-Dist: uvicorn
+Requires-Dist: torch
+Requires-Dist: gymnasium
