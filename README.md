@@ -1,3 +1,13 @@
+---
+title: RL DevSecOps OpenEnv
+emoji: 🤖
+colorFrom: blue
+colorTo: purple
+sdk: docker
+app_file: app.py
+pinned: false
+---
+
 # RL-Based DevSecOps OpenEnv Environment
 
 ## 🚀 Overview
