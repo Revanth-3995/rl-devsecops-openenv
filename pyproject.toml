@@ -1,0 +1,15 @@
+[project]
+name = "rl-devsecops-openenv"
+version = "0.1.0"
+description = "DevSecOps OpenEnv environment"
+
+dependencies = [
+    "openenv-core>=0.2.0"
+]
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project.scripts]
+server = "server.app:main"
