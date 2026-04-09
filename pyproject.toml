@@ -9,7 +9,8 @@ dependencies = [
     "pydantic",
     "uvicorn",
     "torch",
-    "gymnasium"
+    "gymnasium",
+    "openai"
 ]
 
 [build-system]
