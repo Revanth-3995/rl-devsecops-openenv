@@ -4,14 +4,22 @@ from openai import OpenAI
 from env.env import DevSecOpsEnv
 
 def run_inference():
-    api_key = os.getenv("API_KEY")
-    base_url = os.getenv("API_BASE_URL")
+    # Fetch credentials matching the Hackathon Sample
+    api_key = os.getenv("HF_TOKEN") or os.getenv("API_KEY")
+    base_url = os.getenv("API_BASE_URL", "https://router.huggingface.co/v1")
+    model_name = os.getenv("MODEL_NAME", "gpt-3.5-turbo")
+    
+    benchmark_name = "devsecops"
+
+    # Tasks array matching openenv.yaml
+    tasks = ["secret_scanning", "cve_triage", "pipeline_audit"]
 
     # Graceful exit without crash if variables are missing
     if not api_key or not base_url:
-        print("[START] task=0 env=devsecops model=llm")
-        print("[STEP] step=1 action=DETECT reward=0.01 done=true error=\"Missing API configuration\"")
-        print("[END] success=false steps=1 score=0.01 rewards=0.01")
+        for t in tasks:
+            print(f"[START] task={t} env={benchmark_name} model={model_name}")
+            print(f"[STEP] step=1 action=DETECT reward=0.01 done=true error=\"Missing API configuration\"")
+            print(f"[END] success=false steps=1 score=0.010 rewards=0.01")
         return
 
     try:
@@ -19,22 +27,21 @@ def run_inference():
             api_key=api_key,
             base_url=base_url
         )
-        model_name = os.getenv("MODEL_NAME", "gpt-3.5-turbo")
     except Exception as init_err:
-        print("[START] task=0 env=devsecops model=llm")
-        print(f"[STEP] step=1 action=DETECT reward=0.01 done=true error=\"Init error: {str(init_err)}\"")
-        print("[END] success=false steps=1 score=0.01 rewards=0.01")
+        for t in tasks:
+            print(f"[START] task={t} env={benchmark_name} model={model_name}")
+            print(f"[STEP] step=1 action=DETECT reward=0.01 done=true error=\"Init error: {str(init_err)}\"")
+            print(f"[END] success=false steps=1 score=0.010 rewards=0.01")
         return
 
     env = DevSecOpsEnv()
 
-    for task_id in range(1, 4):
-        print(f"[START] task={task_id} env=devsecops model=llm")
+    for task_name in tasks:
+        print(f"[START] task={task_name} env={benchmark_name} model={model_name}")
         
         try:
             state_dict, _ = env.reset()
-            # Observation dictionary structure
-            # e.g., {'task': 1, 'severity': 9.8, 'cvss_base': 9.8, ...}
+            # The observation dictionary contains pipeline states
             
             prompt = (
                 "You are an automated DevSecOps pipeline agent. "
@@ -56,7 +63,7 @@ def run_inference():
             
             action_str = response.choices[0].message.content.strip()
             
-            # Simple heuristic parsing
+            # Simple heuristic parsing and fallback
             action_idx = 0
             if action_str.isdigit() and int(action_str) in range(len(env.actions)):
                 action_idx = int(action_str)
@@ -64,12 +71,15 @@ def run_inference():
             state_dict, req_reward, done, _, _ = env.step(action_idx)
             action_name = env.actions[action_idx]
             
-            print(f"[STEP] step=1 action={action_name} reward={req_reward} done=true error=null")
-            print(f"[END] success=true steps=1 score={req_reward} rewards={req_reward}")
+            req_reward = float(req_reward)
+            success = req_reward >= 0.7  # Basic threshold boolean for success
+            
+            print(f"[STEP] step=1 action={action_name} reward={req_reward:.2f} done=true error=null")
+            print(f"[END] success={str(success).lower()} steps=1 score={req_reward:.3f} rewards={req_reward:.2f}")
 
         except Exception as e:
-            print(f"[STEP] step=1 action=DETECT reward=0.01 done=true error=\"{str(e)}\"")
-            print(f"[END] success=false steps=1 score=0.01 rewards=0.01")
+            print(f"[STEP] step=1 action=DETECT reward=0.01 done=true error=\"{str(e)[:50]}\"")
+            print(f"[END] success=false steps=1 score=0.010 rewards=0.01")
 
 if __name__ == "__main__":
     run_inference()

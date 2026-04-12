@@ -13,7 +13,9 @@ pinned: false
 ## 🚀 Overview
 This project implements a **DevSecOps simulation environment** properly packaged for the **Meta PyTorch Hackathon x Scaler School of Technology**. It simulates a CI/CD pipeline where an agent dynamically performs security actions (detecting secrets, triaging vulnerabilities) based on continuous risk levels and CVSS scores.
 
-It natively supports both **PyTorch TorchRL (PPO)** architectures for offline training and zero-shot **OpenAI LiteLLM Proxies** to satisfy automated evaluator constraints.
+It natively supports a dual-pronged AI architecture:
+1. **PyTorch TorchRL (PPO)** architectures designed for offline local training, proving the environment is solvable and mathematically sound.
+2. **OpenAI LiteLLM Proxies** integrated directly into the `inference.py` script to satisfy the automated Phase 2 evaluator constraints, benchmarking zero-shot frontier LLM reasoning.
 
 ---
 
@@ -57,10 +59,10 @@ It natively supports both **PyTorch TorchRL (PPO)** architectures for offline tr
 
 ### Agents (`agent/`)
 - `policy.py`: PyTorch model architectures (`ActorCritic` classes).
-- `policy.pt`: Serialized PyTorch weights from the trained RL model.
+- `policy.pt`: Serialized PyTorch weights from the baseline trained RL model.
 
 ### Tooling & Inference
-- `inference.py`: Target validation script. Evaluates environment states using the injected Hackathon Proxy LLM (`API_BASE_URL`) via the `openai` client.
+- `inference.py`: Target validation script. Evaluates environment states using the injected Hackathon Proxy LLM (`API_BASE_URL` and `HF_TOKEN`) via the `openai` client.
 - `train_ppo.py`: Dedicated script to offline-train the PPO PyTorch agent against the DevSecOps Gym.
 - `validate-submission.sh`: Local script for executing OpenEnv structural validation tests.
 - `openenv.yaml`: OpenEnv multi-mode operational metadata.
@@ -124,14 +126,15 @@ The server runs out of the modular structure utilizing `uvicorn`:
 uvicorn server.app:app --host 0.0.0.0 --port 7860
 ```
 
-### 3. Hackathon Validation Proxy Test
+### 3. Hackathon Validation Proxy Test (Zero-Shot LLM)
 Run the inference script designed specifically to pass Phase 2 of the Validator checks:
 ```bash
 export API_BASE_URL="http://your-litellm-proxy..."
-export API_KEY="your-keys"
+export HF_TOKEN="your-hf-token"
+export MODEL_NAME="gpt-4.1-mini"
 python inference.py
 ```
-*(Handles missing `API_KEY` gracefully to align with OpenEnv failure-fast testing)*
+*(Handles missing `HF_TOKEN` gracefully to align with OpenEnv failure-fast testing)*
 
 ### 4. Validating Structure Locally
 Verify the environment packaging using the deployment checker:
