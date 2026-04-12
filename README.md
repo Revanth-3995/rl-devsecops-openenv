@@ -15,7 +15,7 @@ This project implements a **DevSecOps simulation environment** properly packaged
 
 It natively supports a dual-pronged AI architecture:
 1. **PyTorch TorchRL (PPO)** architectures designed for offline local training, proving the environment is solvable and mathematically sound.
-2. **OpenAI LiteLLM Proxies** integrated directly into the `inference.py` script to satisfy the automated Phase 2 evaluator constraints, benchmarking zero-shot frontier LLM reasoning.
+2. **OpenAI LiteLLM Proxies** integrated directly into the `inference.py` script, serving as a standardized benchmark to evaluate zero-shot frontier LLM reasoning capabilities in DevOps contexts.
 
 ---
 
@@ -126,8 +126,8 @@ The server runs out of the modular structure utilizing `uvicorn`:
 uvicorn server.app:app --host 0.0.0.0 --port 7860
 ```
 
-### 3. Hackathon Validation Proxy Test (Zero-Shot LLM)
-Run the inference script designed specifically to pass Phase 2 of the Validator checks:
+### 3. Zero-Shot LLM Benchmark Inference
+Execute the inference script to evaluate an integrated LLM via the proxy endpoint:
 ```bash
 export API_BASE_URL="http://your-litellm-proxy..."
 export HF_TOKEN="your-hf-token"
