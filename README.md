@@ -129,10 +129,7 @@ uvicorn server.app:app --host 0.0.0.0 --port 7860
 ### 3. Zero-Shot LLM Benchmark Inference
 Execute the inference script to evaluate an integrated LLM via the proxy endpoint:
 ```bash
-export API_BASE_URL="http://your-litellm-proxy..."
-export HF_TOKEN="your-hf-token"
-export MODEL_NAME="gpt-4.1-mini"
-python inference.py
+//
 ```
 *(Handles missing `HF_TOKEN` gracefully to align with OpenEnv failure-fast testing)*
 
