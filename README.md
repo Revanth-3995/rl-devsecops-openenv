@@ -130,7 +130,7 @@ uvicorn server.app:app --host 0.0.0.0 --port 7860
 Execute the inference script to evaluate an integrated LLM via the proxy endpoint:
 ```bash
 export API_BASE_URL="http://your-litellm-proxy..."
-export HF_TOKEN="hf1234ghthshn"
+export HF_TOKEN="your-hf-token"
 export MODEL_NAME="gpt-4.1-mini"
 python inference.py
 ```
